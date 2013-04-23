@@ -13,8 +13,6 @@ module Spree
     # 1.3 release.
     include Spree::Order::Checkout
     checkout_flow do
-      go_to_state :address
-      go_to_state :delivery
       go_to_state :payment, if: ->(order) {
         # Fix for #2191
         if order.shipments
