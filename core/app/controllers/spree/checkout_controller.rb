@@ -23,10 +23,10 @@ module Spree
     # Updates the order and advances to the next state (when possible.)
     # Overriden by the promo gem if it exists.
     def update
-      session[:dotpay_channel] = "11"
+
       if @order.update_attributes(object_params)
         fire_event('spree.checkout.update')
-
+         session[:dotpay_channel] = params[:channel]
         if @order.next
           state_callback(:after)
         else
