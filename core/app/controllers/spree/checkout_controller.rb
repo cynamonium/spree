@@ -26,7 +26,6 @@ module Spree
 
       if @order.update_attributes(object_params)
         fire_event('spree.checkout.update')
-         session[:dotpay_channel] = params[:channel]
         if @order.next
           state_callback(:after)
         else
