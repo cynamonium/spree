@@ -6,7 +6,7 @@ module Spree
     rescue_from ActiveRecord::RecordNotFound, :with => :render_404
     helper 'spree/products', 'spree/orders'
 
-    respond_to :html
+    respond_to :html, :mobile
 
     def show
       @order = Order.find_by_number!(params[:id])
@@ -25,6 +25,14 @@ module Spree
         fire_event('spree.order.contents_changed')
         respond_with(@order) do |format|
           format.html do
+            if params.has_key?(:checkout)
+              @order.next_transition.run_callbacks
+              redirect_to checkout_state_path(@order.checkout_steps.first)
+            else
+              redirect_to cart_path
+            end
+          end
+          format.mobile do
             if params.has_key?(:checkout)
               @order.next_transition.run_callbacks
               redirect_to checkout_state_path(@order.checkout_steps.first)
@@ -52,6 +60,7 @@ module Spree
         fire_event('spree.order.contents_changed')
         respond_with(@order) do |format|
           format.html { redirect_to cart_path }
+          format.mobile { redirect_to cart_path }
         end
       else
         flash[:error] = populator.errors.full_messages.join(" ")
