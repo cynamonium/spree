@@ -6,7 +6,10 @@ Spree::CheckoutController.class_eval do
 
       fire_event('spree.checkout.update')
       unless apply_coupon_code
-        respond_with(@order) { |format| format.html { render :edit } }
+        respond_with(@order) do |format|
+         format.html { render :edit }
+         format.mobile { render :edit } 
+        end
         return
       end
 
