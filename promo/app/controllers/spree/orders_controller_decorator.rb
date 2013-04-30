@@ -15,6 +15,13 @@ Spree::OrdersController.class_eval do
             redirect_to cart_path
           end
         end
+        format.mobile do
+          if params.has_key?(:checkout)
+            redirect_to checkout_state_path(@order.checkout_steps.first)
+          else
+            redirect_to cart_path
+          end
+        end
       end
     else
       respond_with(@order)
