@@ -16,6 +16,7 @@ module Spree
     before_filter :check_authorization
     rescue_from Spree::Core::GatewayError, :with => :rescue_from_spree_gateway_error
 
+    respond_to :html, :mobile
 
     helper 'spree/orders'
 
