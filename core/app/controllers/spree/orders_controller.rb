@@ -6,8 +6,6 @@ module Spree
     rescue_from ActiveRecord::RecordNotFound, :with => :render_404
     helper 'spree/products', 'spree/orders'
 
-    respond_to :html, :mobile
-
     def show
       @order = Order.find_by_number!(params[:id])
       respond_with(@order)
@@ -49,10 +47,8 @@ module Spree
       if populator.populate(params.slice(:products, :variants, :quantity))
         fire_event('spree.cart.add')
         fire_event('spree.order.contents_changed')
-        respond_with(@order) do |format|
-          format.html { redirect_to cart_path }
-          format.mobile { redirect_to cart_path }
-        end
+        redirect_to cart_path }
+
       else
         flash[:error] = populator.errors.full_messages.join(" ")
         redirect_to :back
