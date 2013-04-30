@@ -47,7 +47,7 @@ module Spree
       if populator.populate(params.slice(:products, :variants, :quantity))
         fire_event('spree.cart.add')
         fire_event('spree.order.contents_changed')
-        redirect_to cart_path }
+        redirect_to cart_path
 
       else
         flash[:error] = populator.errors.full_messages.join(" ")
