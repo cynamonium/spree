@@ -14,8 +14,9 @@ Spree::OrdersController.class_eval do
                 session[:order_id] = nil 
                 @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
                 redirect_to checkout_state_path('complete')
+            else
+              redirect_to checkout_state_path(@order.checkout_steps.first)
             end
-            redirect_to checkout_state_path(@order.checkout_steps.first)
           else
             redirect_to cart_path
           end
