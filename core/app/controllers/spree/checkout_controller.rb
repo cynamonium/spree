@@ -27,7 +27,7 @@ module Spree
       if @order.update_attributes(object_params)
         fire_event('spree.checkout.update')
         if @order.next
-          if @order.state == "complete" && @order.total == 0
+          if @order.state == "complete"
             session[:order_id] = nil
             @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
           else
