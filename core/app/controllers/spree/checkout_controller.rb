@@ -27,7 +27,12 @@ module Spree
       if @order.update_attributes(object_params)
         fire_event('spree.checkout.update')
         if @order.next
-          state_callback(:after)
+          if @order.state == "complete" && @order.total == 0
+            session[:order_id] = nil
+            @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
+          else
+            state_callback(:after)
+          end
         else
           flash[:error] = t(:payment_processing_failed)
           respond_with(@order, :location => checkout_state_path(@order.state))
