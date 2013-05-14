@@ -12,8 +12,7 @@ Spree::CheckoutController.class_eval do
         end
         return
       end
-      session[:order_id] = nil
-      @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
+      
       if @order.next
         state_callback(:after)
       else
@@ -30,6 +29,8 @@ Spree::CheckoutController.class_eval do
         respond_with(@order, :location => checkout_state_path(@order.state))
       end
     else
+      session[:order_id] = nil
+      @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
       respond_with(@order) { |format| format.html { render :edit } }
     end
   end
