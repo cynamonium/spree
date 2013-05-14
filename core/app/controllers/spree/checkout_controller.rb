@@ -37,10 +37,10 @@ module Spree
         if @order.state == "complete" || @order.completed?
           flash.notice = t(:order_processed_successfully)
           flash[:commerce_tracking] = "nothing special"
-          if @order.total == 0
-            session[:order_id] = nil
-            @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
-          end
+
+          session[:order_id] = nil
+          @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
+
           respond_with(@order, :location => completion_route)
         else
           respond_with(@order, :location => checkout_state_path(@order.state))
