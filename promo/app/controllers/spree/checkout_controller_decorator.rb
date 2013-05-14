@@ -2,8 +2,6 @@ Spree::CheckoutController.class_eval do
 
   #TODO 90% of this method is duplicated code. DRY
   def update
-       session[:order_id] = nil
-      @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
     if @order.update_attributes(object_params)
 
       fire_event('spree.checkout.update')
@@ -14,7 +12,7 @@ Spree::CheckoutController.class_eval do
         end
         return
       end
-      
+
       if @order.next
         state_callback(:after)
       else
@@ -31,7 +29,6 @@ Spree::CheckoutController.class_eval do
         respond_with(@order, :location => checkout_state_path(@order.state))
       end
     else
-
       respond_with(@order) { |format| format.html { render :edit } }
     end
   end
