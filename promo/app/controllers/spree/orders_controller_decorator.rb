@@ -13,7 +13,7 @@ Spree::OrdersController.class_eval do
             if @order.total==0
                 session[:order_id] = nil 
                 @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
-                redirect_to checkout_state_path('complete')
+                render 'show'
             else
               redirect_to checkout_state_path(@order.checkout_steps.first)
             end
