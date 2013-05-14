@@ -11,7 +11,7 @@ Spree::OrdersController.class_eval do
         format.html do
           if params.has_key?(:checkout)
             if @order.total==0
-                session[:order_id] = nil
+                session[:order_id] = nil 
                 @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
             end
             redirect_to checkout_state_path(@order.checkout_steps.first)
