@@ -10,7 +10,7 @@ Spree::OrdersController.class_eval do
       respond_with(@order) do |format|
         format.html do
           if params.has_key?(:checkout)
-            if @order.total==0
+            if @order.total==0 && spree_current_user
                 session[:order_id] = nil 
                 @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
                 render 'show'
