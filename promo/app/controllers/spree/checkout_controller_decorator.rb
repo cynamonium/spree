@@ -31,6 +31,10 @@ Spree::CheckoutController.class_eval do
         respond_with(@order, :location => checkout_state_path(@order.state))
       end
     else
+      if @order.total==0 && spree_current_user && @order.state == 'complete'
+        session[:order_id] = nil 
+        @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
+      end
       respond_with(@order) { |format| format.html { render :edit } }
     end
   end
