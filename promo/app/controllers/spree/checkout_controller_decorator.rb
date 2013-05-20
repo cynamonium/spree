@@ -22,6 +22,8 @@ Spree::CheckoutController.class_eval do
       end
 
       if @order.state == 'complete' || @order.completed?
+        session[:order_id] = nil 
+        @order.update_attributes({:state => "complete", :payment_state => 'paid', :completed_at => Time.now}, :without_protection => true)
         flash.notice = t(:order_processed_successfully)
         flash[:commerce_tracking] = 'nothing special'
         respond_with(@order, :location => completion_route)
